@@ -11,7 +11,6 @@ const render = function () {
     todoList.innerHTML = '';
     todoCompleted.innerHTML = '';
 
-    //todoData.forEach(function (item, index) {
     exitData.forEach(function (item, index) {
         const newTask = document.createElement('li');
         newTask.classList.add("todo-item");
@@ -33,6 +32,10 @@ const render = function () {
         newTask.querySelector('.todo-remove').addEventListener('click', function () {
             newTask.remove();
             todoData.splice(index, 1);
+            console.log(todoData.length);
+            //localStorage.setItem('data', JSON.stringify(todoData));
+            fillDatainLocalStorage();
+
         });
     });
 };
@@ -45,52 +48,31 @@ const takeDatafromLocalStorage = function () {
     exitData = JSON.parse(localStorage.getItem('data'));
 };
 
-const autoFillToDoList = function () {
-
-    takeDatafromLocalStorage();
-    render();
+const addNewTask = function () {
+    todoControl.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (headerInput.value != '') {
+            const newTodo = {
+                text: headerInput.value,
+                completed: false
+            };
+            todoData.push(newTodo);
+            fillDatainLocalStorage();
+            takeDatafromLocalStorage();
+            render();
+            headerInput.value = '';
+        }
+    });
 };
-
-/* todoControl.addEventListener('submit', function (event) {
-    event.preventDefault();
-    if (headerInput.value != '') {
-
-        const newTodo = {
-            text: headerInput.value,
-            completed: false
-        };
-        todoData.push(newTodo);
-        fillDatainLocalStorage();
-        takeDatafromLocalStorage();
-        render();
-        headerInput.value = '';
-    }
-
-}); */
-
 window.addEventListener('load', function () {
     takeDatafromLocalStorage();
-    if (exitData === null) {
+    if (exitData === null || exitData.length == 0) {
         console.log('массив пустой, нужно создать задачи');
-        todoControl.addEventListener('submit', function (event) {
-            event.preventDefault();
-            if (headerInput.value != '') {
+        addNewTask();
 
-                const newTodo = {
-                    text: headerInput.value,
-                    completed: false
-                };
-                todoData.push(newTodo);
-                fillDatainLocalStorage();
-                takeDatafromLocalStorage();
-                render();
-                headerInput.value = '';
-            }
-
-        });
     } else {
         console.log('задачи есть в localStorage');
-        // takeDatafromLocalStorage();
         render();
+        addNewTask();
     }
 });
