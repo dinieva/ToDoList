@@ -3,7 +3,6 @@ const headerInput = document.querySelector('.header-input');
 const todoList = document.querySelector('.todo-list');
 const todoCompleted = document.querySelector('.todo-completed');
 
-//let todoData = JSON.parse(localStorage.getItem('data'));
 let todoData;
 
 // render выводит задачи из массива todoData
@@ -27,13 +26,12 @@ const render = function () {
         newTask.querySelector('.todo-complete').addEventListener('click', function () {
             //item.completed = true;
             item.completed = !item.completed;
-            localStorage.setItem('data', JSON.stringify(todoData));
+            fillDatainLocalStorage();
             render();
         });
         newTask.querySelector('.todo-remove').addEventListener('click', function () {
             newTask.remove();
             todoData.splice(index, 1);
-            console.log(todoData.length);
             fillDatainLocalStorage();
         });
     });
