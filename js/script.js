@@ -3,7 +3,8 @@ const headerInput = document.querySelector('.header-input');
 const todoList = document.querySelector('.todo-list');
 const todoCompleted = document.querySelector('.todo-completed');
 
-let todoData = JSON.parse(localStorage.getItem('data'));
+//let todoData = JSON.parse(localStorage.getItem('data'));
+let todoData;
 
 // render выводит задачи из массива todoData
 const render = function () {
@@ -65,6 +66,7 @@ const addNewTask = function () {
 window.addEventListener('load', function () {
     takeDatafromLocalStorage();
     if (todoData === null || todoData.length == 0) {
+        todoData = [];
         console.log('массив пустой, нужно создать задачи');
         addNewTask();
 
