@@ -3,15 +3,14 @@ const headerInput = document.querySelector('.header-input');
 const todoList = document.querySelector('.todo-list');
 const todoCompleted = document.querySelector('.todo-completed');
 
-const todoData = [];
-let exitData;
+let todoData = JSON.parse(localStorage.getItem('data'));
 
 // render выводит задачи из массива todoData
 const render = function () {
     todoList.innerHTML = '';
     todoCompleted.innerHTML = '';
 
-    exitData.forEach(function (item, index) {
+    todoData.forEach(function (item, index) {
         const newTask = document.createElement('li');
         newTask.classList.add("todo-item");
         newTask.innerHTML = '<span class="text-todo">' + item.text + '</span>' +
@@ -27,15 +26,14 @@ const render = function () {
         newTask.querySelector('.todo-complete').addEventListener('click', function () {
             //item.completed = true;
             item.completed = !item.completed;
+            localStorage.setItem('data', JSON.stringify(todoData));
             render();
         });
         newTask.querySelector('.todo-remove').addEventListener('click', function () {
             newTask.remove();
             todoData.splice(index, 1);
             console.log(todoData.length);
-            //localStorage.setItem('data', JSON.stringify(todoData));
             fillDatainLocalStorage();
-
         });
     });
 };
@@ -45,7 +43,7 @@ const fillDatainLocalStorage = function () {
 };
 
 const takeDatafromLocalStorage = function () {
-    exitData = JSON.parse(localStorage.getItem('data'));
+    todoData = JSON.parse(localStorage.getItem('data'));
 };
 
 const addNewTask = function () {
@@ -66,7 +64,7 @@ const addNewTask = function () {
 };
 window.addEventListener('load', function () {
     takeDatafromLocalStorage();
-    if (exitData === null || exitData.length == 0) {
+    if (todoData === null || todoData.length == 0) {
         console.log('массив пустой, нужно создать задачи');
         addNewTask();
 
